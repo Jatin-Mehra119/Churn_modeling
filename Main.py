@@ -105,7 +105,7 @@ save_plot(plt, 'PairPlots')
 # Relationship B/W Country X Estimated Salary & Exited
 sns.catplot(data=df,x='Geography', y='EstimatedSalary', hue='Exited', kind='box', height=4, palette ='Set2')
 plt.title('Relationship B/W Country X Estimated Salary & Exited (Exited 1:Yes, 0:No)')
-save_plot(plt, 'Relationship B/W Country X Estimated Salary & Exited')
+save_plot(plt, filename = 'Relationship Between Country,Estimated Salary & Exited')
 
 # Correlation Matrix
 plt.figure(figsize=(10, 7))
@@ -134,8 +134,34 @@ print(f"""
 from Trainer import ModelTrainer
 from Preprocessor import Preprocessing
 from scipy.stats import randint
-
+import json
 preprocessing = Preprocessing()  # Instantiate the preprocessor
+
+def save_metrics_to_json(trainer_instance):
+    """
+    Save metrics from a ModelTrainer instance to a JSON file.
+
+    Parameters:
+    - trainer_instance (ModelTrainer): An instance of ModelTrainer with collected metrics.
+    """
+    # Generate the file path dynamically based on the model name
+    metrics_file = f"/workspaces/Churn_modeling/Metrics/{trainer_instance.model}.json"
+
+    # Fetch metrics from the trainer instance
+    metrics_to_save = trainer_instance.metrics
+
+    # Ensure the directory exists; create it if it doesn't
+    save_folder = os.path.dirname(metrics_file)
+    os.makedirs(save_folder, exist_ok=True)
+
+    # Save metrics to JSON file
+    try:
+        with open(metrics_file, 'w') as f:
+            json.dump(metrics_to_save, f, indent=4)
+        print(f"Metrics saved to {metrics_file}")
+    except IOError as e:
+        print(f"Error saving metrics to {metrics_file}: {e}")
+
 
 # Logistic Regression
 from sklearn.linear_model import LogisticRegression
@@ -152,6 +178,8 @@ trainer_logistic.hypertune(train_X, train_y)
 trainer_logistic.evaluate(test_X, test_y)
 roc_curve_logistic = trainer_logistic.plot_roc_curve(test_X, test_y)
 save_plot(roc_curve_logistic, 'Logistic_roc_curve')
+save_metrics_to_json(trainer_logistic)
+
 
 # Random Forest Classifier
 from sklearn.ensemble import RandomForestClassifier
@@ -169,5 +197,119 @@ trainer_randomforest = ModelTrainer(RandomForestClassifier(), preprocessing, par
 trainer_randomforest.train(train_X, train_y)
 trainer_randomforest.hypertune(train_X, train_y)
 trainer_randomforest.evaluate(test_X, test_y)
-trainer_randomforest.plot_roc_curve(test_X, test_y)
-save_plot(roc_curve_logistic, 'rf_roc_curve')
+roc_curve_rf = trainer_randomforest.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_rf, 'Rf_roc_curve')
+save_metrics_to_json(trainer_randomforest)
+
+
+# GradientBoostingClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+
+param_grid = {
+    'gradientboostingclassifier__learning_rate' : [0.01, 0.001, 0.0001, 0.1],
+    'gradientboostingclassifier__n_estimators': randint(50, 500), 
+    'gradientboostingclassifier__tol' : [0.001, 0.0001, 0.01, 0.1],
+    'gradientboostingclassifier__max_features': randint(3, 13)
+}
+
+trainer_gradientboosting = ModelTrainer(GradientBoostingClassifier(), preprocessing, param_grid)
+trainer_gradientboosting.train(train_X, train_y)
+trainer_gradientboosting.hypertune(train_X, train_y)
+trainer_gradientboosting.evaluate(test_X, test_y)
+roc_curve_gradientboosting = trainer_gradientboosting.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_gradientboosting, 'Gradientboosting_roc_curve')
+save_metrics_to_json(trainer_gradientboosting)
+
+# AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier
+
+param_grid_ada = {
+    'adaboostclassifier__n_estimators': randint(50, 500),
+    'adaboostclassifier__learning_rate': [0.01, 0.1, 1.0, 1.5, 2.0]
+}
+
+trainer_ada = ModelTrainer(AdaBoostClassifier(), preprocessing, param_grid_ada)
+trainer_ada.train(train_X, train_y)
+trainer_ada.hypertune(train_X, train_y)
+trainer_ada.evaluate(test_X, test_y)
+roc_curve_adaboosting = trainer_ada.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_adaboosting, 'AdaBoosting_roc_curve')
+save_metrics_to_json(trainer_ada)
+
+# Support Vector Classifier
+from sklearn.svm import SVC
+from scipy.stats import uniform
+
+param_grid_svc = {
+    'svc__C': uniform(0.1, 10),
+    'svc__kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
+    'svc__gamma': ['scale', 'auto']
+}
+
+trainer_svc = ModelTrainer(SVC(), preprocessing, param_grid_svc)
+trainer_svc.train(train_X, train_y)
+trainer_svc.hypertune(train_X, train_y)
+trainer_svc.evaluate(test_X, test_y)
+roc_curve_SVC = trainer_svc.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_SVC, 'SVC_roc_curve')
+save_metrics_to_json(trainer_svc)
+
+# K-Nearest Neighbors Classifier
+from sklearn.neighbors import KNeighborsClassifier
+from scipy.stats import randint
+
+param_grid_knn = {
+    'kneighborsclassifier__n_neighbors': randint(1, 30),
+    'kneighborsclassifier__weights': ['uniform', 'distance'],
+    'kneighborsclassifier__algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']
+}
+
+trainer_knn = ModelTrainer(KNeighborsClassifier(), preprocessing, param_grid_knn)
+trainer_knn.train(train_X, train_y)
+trainer_knn.hypertune(train_X, train_y)
+trainer_knn.evaluate(test_X, test_y)
+roc_curve_knn = trainer_knn.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_knn, 'Knn_roc_curve')
+save_metrics_to_json(trainer_knn)
+
+# ExtraTreesClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from scipy.stats import randint
+
+param_grid_et = {
+    'extratreesclassifier__n_estimators': randint(100, 1000),
+    'extratreesclassifier__max_features': ['sqrt', 'log2', None],
+    'extratreesclassifier__max_depth': [None, 10, 20, 30],
+    'extratreesclassifier__min_samples_split': [2, 5, 10],
+    'extratreesclassifier__min_samples_leaf': [1, 2, 4]
+}
+
+trainer_et = ModelTrainer(ExtraTreesClassifier(), preprocessing, param_grid_et)
+trainer_et.train(train_X, train_y)
+trainer_et.hypertune(train_X, train_y)
+trainer_et.evaluate(test_X, test_y)
+roc_curve_et = trainer_et.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_et, 'Et_roc_curve')
+save_metrics_to_json(trainer_et)
+
+# MLP (NN)
+from sklearn.neural_network import MLPClassifier
+from scipy.stats import uniform
+
+param_grid_mlp = {
+    'mlpclassifier__hidden_layer_sizes': [(50,), (100,), (50, 50), (100, 50)],
+    'mlpclassifier__activation': ['identity', 'logistic', 'tanh', 'relu'],
+    'mlpclassifier__solver': ['lbfgs', 'sgd', 'adam'],
+    'mlpclassifier__alpha': uniform(0.0001, 0.01),
+    'mlpclassifier__learning_rate': ['constant', 'invscaling', 'adaptive'],
+    'mlpclassifier__max_iter': randint(1000, 2500), 
+    'mlpclassifier__early_stopping': [True, False]
+}
+
+trainer_mlp = ModelTrainer(MLPClassifier(max_iter=1000), preprocessing, param_grid_mlp)
+trainer_mlp.train(train_X, train_y)
+trainer_mlp.hypertune(train_X, train_y)
+trainer_mlp.evaluate(test_X, test_y)
+roc_curve_MLP = trainer_mlp.plot_roc_curve(test_X, test_y)
+save_plot(roc_curve_MLP, 'MLP_roc_curve')
+save_metrics_to_json(trainer_mlp)
