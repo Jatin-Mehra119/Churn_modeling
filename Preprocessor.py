@@ -6,6 +6,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.base import TransformerMixin, BaseEstimator
 
+def safe_log_transform(x):
+    return np.log(x + 1e-9)  # Adding a small constant to avoid log(0)
+
 class Preprocessing(BaseEstimator, TransformerMixin):
     def __init__(self):
         # lists of features for each transformation type
@@ -18,9 +21,6 @@ class Preprocessing(BaseEstimator, TransformerMixin):
             ('imputer', SimpleImputer(strategy="median")),
             ('scaler', StandardScaler())
         ])
-
-        def safe_log_transform(x):
-            return np.log(x + 1e-9)  # Adding a small constant to avoid log(0)
 
         # pipeline for logarithmic transformation features
         self.log_pipeline = Pipeline([

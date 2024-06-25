@@ -3,10 +3,13 @@ import pandas as pd
 import numpy as np
 # Loading the data 
 df = Loader.load(path='/workspaces/Churn_modeling/Churn_Modelling.csv')
-
+pd.set_option('display.max_rows', 100)  
+pd.set_option('display.max_columns', 100)
+pd.set_option('display.width', 1500)
+pd.set_option('display.float_format', lambda x: '%.2f' % x)
 
 print("________________________________DataFrame________________________________")
-print(df.head())
+print(df)
 
 
 
