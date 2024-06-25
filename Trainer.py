@@ -5,6 +5,8 @@ from sklearn.model_selection import cross_val_score, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, classification_report, roc_curve, roc_auc_score
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import randint
+import joblib
+import os
 
 def fetch_feature_importance(func):
     def wrapper(self, *args, **kwargs):
@@ -56,6 +58,7 @@ class ModelTrainer:
         self.random_state = random_state
         self.metrics = {}  # Dictionary to store metrics
         self.clf = make_pipeline(preprocessing, model) if preprocessing else model
+        self.save_dir = "/workspaces/Churn_modeling/TrainedModels"
     
     @fetch_feature_importance
     def train(self, train_X, train_y):
@@ -91,7 +94,18 @@ class ModelTrainer:
         print(classification_report(test_y, pred_y))
         self.metrics['test_accuracy'] = accuracy  # Store the test accuracy
         self.metrics['classification_report'] = report  # Store the classification report
-    
+        try:
+            # Ensure the directory exists; create it if it doesn't
+            os.makedirs(self.save_dir, exist_ok=True)
+            
+            # Save the model to the specified folder
+            model_path = os.path.join(self.save_dir, f"{self.model}.pkl")
+            joblib.dump(clf_to_use, model_path)
+            
+            print(f"Model saved to {model_path}")
+        except Exception as e:
+            print(f"Error saving model: {e}")
+
     def plot_roc_curve(self, test_X, test_y):
         clf_to_use = self.best_estimator_ if hasattr(self, 'best_estimator_') else self.clf
         if hasattr(clf_to_use, "decision_function"):
