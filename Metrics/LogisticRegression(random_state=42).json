@@ -1,0 +1,49 @@
+{
+    "cross_val_score": 0.19950288141508551,
+    "feature_importances": {
+        "num__Age": 0.6496800037188805,
+        "num__Tenure": 0.0023052340855121848,
+        "num__NumOfProducts": 0.07517529067824369,
+        "log__CreditScore": 0.10457076140954712,
+        "log__Balance": 0.15902984390556799,
+        "log__EstimatedSalary": 0.018667565712299994,
+        "cat__Geography_France": 0.5470080621598341,
+        "cat__Geography_Germany": 0.2661812296072538,
+        "cat__Geography_Spain": 0.514590783462709,
+        "cat__Gender_Female": 0.12656322461793884,
+        "cat__Gender_Male": 0.6688543913973506
+    },
+    "best_params": {
+        "logisticregression__C": 7,
+        "logisticregression__max_iter": 150,
+        "logisticregression__tol": 0.0001
+    },
+    "test_accuracy": 0.795,
+    "classification_report": {
+        "0": {
+            "precision": 0.812137203166227,
+            "recall": 0.9661016949152542,
+            "f1-score": 0.882454128440367,
+            "support": 1593.0
+        },
+        "1": {
+            "precision": 0.4857142857142857,
+            "recall": 0.12530712530712532,
+            "f1-score": 0.19921875,
+            "support": 407.0
+        },
+        "accuracy": 0.795,
+        "macro avg": {
+            "precision": 0.6489257444402563,
+            "recall": 0.5457044101111898,
+            "f1-score": 0.5408364392201834,
+            "support": 2000.0
+        },
+        "weighted avg": {
+            "precision": 0.745710139464757,
+            "recall": 0.795,
+            "f1-score": 0.7434157289277523,
+            "support": 2000.0
+        }
+    }
+}
