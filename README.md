@@ -2,6 +2,9 @@
 
 This repository contains scripts for building and evaluating a model to predict customer churn. Customer churn refers to the loss of clients or customers. The project details the steps involved in data preprocessing, exploratory data analysis (EDA), feature engineering, model building, and evaluation.
 
+# Notebook Link- 
+https://drive.google.com/file/d/1MrB7uxLFmWTElEld3xBp4pO1tReAGHr-/view?usp=sharing
+
 ## Table of Contents
 
 1.  [Installation](#installation)
