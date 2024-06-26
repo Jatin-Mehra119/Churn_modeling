@@ -1,12 +1,12 @@
 # Churn Modeling
 
-This repository contains a Jupyter Notebook for building and evaluating a model to predict customer churn. Customer churn refers to the loss of clients or customers. The notebook details the steps involved in data preprocessing, exploratory data analysis (EDA), feature engineering, model building, and evaluation.
+This repository contains scripts for building and evaluating a model to predict customer churn. Customer churn refers to the loss of clients or customers. The project details the steps involved in data preprocessing, exploratory data analysis (EDA), feature engineering, model building, and evaluation.
 
 ## Table of Contents
 
 1.  [Installation](#installation)
 2.  [Data Description](#data-description)
-3.  [Notebook Overview](#notebook-overview)
+3.  [Script Overview](#script-overview)
 4.  [Modeling Process](#modeling-process)
 5.  [Results](#results)
 6.  [Conclusion](#conclusion)
@@ -14,10 +14,9 @@ This repository contains a Jupyter Notebook for building and evaluating a model 
 
 ## Installation
 
-To run the notebook locally, ensure you have the following dependencies installed:
+To run the scripts locally, ensure you have the following dependencies installed:
 
 -   Python 3.x
--   Jupyter Notebook
 -   Pandas
 -   NumPy
 -   Scikit-learn
@@ -26,7 +25,7 @@ To run the notebook locally, ensure you have the following dependencies installe
 
 You can install the required packages using the following command:
 
-`pip install pandas numpy scikit-learn matplotlib seaborn` 
+pip install pandas numpy scikit-learn matplotlib seaborn
 
 ## Data Description
 
@@ -44,28 +43,18 @@ The dataset contains customer-related information. Features include:
 -   **EstimatedSalary**: Estimated salary of the customer.
 -   **Exited**: Whether the customer has churned (target variable).
 
-## Notebook Overview
+## Script Overview
 
-The notebook consists of the following sections:
+The project consists of the following scripts:
 
-1.  **Data Loading and Preprocessing**:
-    -   Import necessary libraries.
-    -   Load the dataset.
-    -   Handle missing values and perform data cleaning.
-2.  **Exploratory Data Analysis (EDA)**:
-    -   Visualize the distribution of various features.
-    -   Analyze the correlation between features.
-    -   Explore the relationship between features and the target variable (churn).
-3.  **Feature Engineering**:
-    -   Encode categorical variables.
-    -   Scale numerical features.
-4.  **Model Building**:
-    -   Split the data into training and testing sets.
-    -   Train various machine learning models (e.g., Logistic Regression, Decision Trees, Random Forest, etc.).
-    -   Evaluate the performance of the models using appropriate metrics.
-5.  **Model Evaluation**:
-    -   Compare model performance using metrics such as accuracy, precision, recall, F1-score, and ROC-AUC.
-    -   Select the best-performing model.
+1.  **LoadData.py**:
+    -   Script for loading and preparing the dataset.
+2.  **Preprocessor.py**:
+    -   Script for preprocessing the data.
+3.  **Trainer.py**:
+    -   Script for training various machine learning models.
+4.  **Main.py**:
+    -   Main script that orchestrates the workflow, including loading data, preprocessing, training models, and making predictions.
 
 ## Modeling Process
 
